@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+@theme {
+  --color-slate-950: #0b1329;
+  --color-slate-900: #1c2541;
+  --color-slate-800: #3a506b;
+  --color-amber-500: #ff9f1c;
+  
+  --color-background: #030712;
+  --color-foreground: #f8fafc;
+}
+
+@utility glass-card {
+  background: rgba(17, 24, 39, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+@utility glow-orange {
+  box-shadow: 0 0 40px -10px rgba(249, 115, 22, 0.2);
+}
+
+body {
+  background-color: #030712;
+  color: #f8fafc;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}

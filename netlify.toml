@@ -1,0 +1,12 @@
+# Netlify configuration for Roast My Startup AI Next.js App
+
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+[build.environment]
+  # Next.js configurations
+  NEXT_USE_NETLIFY_EDGE = "true"
