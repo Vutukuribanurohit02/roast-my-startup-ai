@@ -1,18 +1,15 @@
 'use client';
 
-import { useEffect, useState, use } from 'react';
-import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import { supabase } from '@/lib/supabaseClient';
 import { generateMockReport, StartupReport } from '@/lib/mockReport';
 
-interface ReportPageProps {
-  params: Promise<{ id: string }>;
-}
-
-export default function ReportPage({ params }: ReportPageProps) {
-  const { id } = use(params);
+export default function ReportPage() {
+  const params = useParams();
+  const id = params.id as string;
   const router = useRouter();
   const [reportData, setReportData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
