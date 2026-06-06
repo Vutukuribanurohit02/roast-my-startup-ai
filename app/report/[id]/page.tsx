@@ -54,17 +54,35 @@ export default function ReportPage() {
           });
           setIsSaved(id === 'sample-report-id');
         } else {
-          // Fetch from Supabase / localDb fallback
-          const { data, error } = await supabase
-            .from('startup_reports')
-            .select('*')
-            .eq('id', id)
-            .single();
-
-          if (error) {
-            throw error;
+          let report = null;
+          try {
+            const { data, error } = await supabase
+              .from('startup_reports')
+              .select('*')
+              .eq('id', id)
+              .single();
+            
+            if (!error && data) {
+              report = data;
+            }
+          } catch (dbErr) {
+            console.warn('DB single fetch failed. Checking LocalStorage fallback...', dbErr);
           }
-          setReportData(data);
+
+          if (!report) {
+            const { localDb } = require('@/lib/supabaseClient');
+            const localReports = localDb.getReports();
+            const found = localReports.find((r: any) => r.id === id);
+            if (found) {
+              report = found;
+            }
+          }
+
+          if (!report) {
+            throw new Error('Report not found');
+          }
+
+          setReportData(report);
           setIsSaved(true);
         }
       } catch (err) {

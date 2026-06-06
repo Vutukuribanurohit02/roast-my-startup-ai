@@ -86,20 +86,33 @@ export default function SubmitPage() {
         startup_score: reportJson.startupScore
       };
 
-      const { data, error } = await supabase
-        .from('startup_reports')
-        .insert(reportData)
-        .select();
+      let savedId = null;
 
-      if (error) {
-        throw error;
+      try {
+        const { data, error } = await supabase
+          .from('startup_reports')
+          .insert(reportData)
+          .select();
+
+        if (error) {
+          throw error;
+        }
+        savedId = data?.[0]?.id;
+      } catch (dbErr) {
+        console.warn('Database save failed. Falling back to LocalStorage:', dbErr);
+        const { localDb } = require('@/lib/supabaseClient');
+        const localId = 'mock-report-' + Math.random().toString(36).substring(2, 11);
+        localDb.saveReport({
+          id: localId,
+          ...reportData,
+          created_at: new Date().toISOString()
+        });
+        savedId = localId;
       }
 
-      const savedReport = data?.[0];
-      if (savedReport) {
-        router.push(`/report/${savedReport.id}`);
+      if (savedId) {
+        router.push(`/report/${savedId}`);
       } else {
-        // Fallback in case returning row failed
         router.push(`/report/temp-id`);
       }
 

@@ -92,6 +92,9 @@ if (isSupabaseConfigured) {
     }
 
     select(columns?: string) {
+      if (this.data !== null) {
+        return this;
+      }
       if (this.table === 'startup_reports') {
         this.data = localDb.getReports();
       } else {
